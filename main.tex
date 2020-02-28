@@ -1,0 +1,64 @@
+\documentclass[acmtog]{acmart}
+\settopmatter{printacmref=false} % Removes citation information below abstract
+\renewcommand\footnotetextcopyrightpermission[1]{} % removes footnote with conference information in first column
+\pagestyle{plain} % removes running headers
+
+\usepackage{booktabs} % For formal tables
+
+% Use the "authoryear" citation style, and make sure citations are in [square brackets].
+\citestyle{acmauthoryear}
+\setcitestyle{square}
+
+% A useful command for controlling the number of authors per row.
+% The default value of "authorsperrow" is 2.
+\settopmatter{authorsperrow=4}
+
+% end of preamble.
+
+\begin{document}
+
+% Title. 
+\title{Crowd Simulation: Boids++}
+\subtitle{Boids Framework --- A Modern take on Craig Reynolds' Boids.}
+
+% Authors.
+\author{Di Zhao}
+  \affiliation{%
+    \institution{University of Califonia, Davis}}
+  \email{devzhao@ucdavis.edu}
+
+\author{Muhammad Osama}
+  \affiliation{%
+    \institution{University of Califonia, Davis}}
+  \email{mosama@ucdavis.edu}
+
+% abstract
+\begin{abstract}
+\input{tex/abstract.tex}
+\label{sec:abstract}
+\end{abstract}
+
+%keywords
+\keywords{Crowd Simulation, Boids, Computer Animation}
+
+\maketitle
+
+\section{Introduction}
+\label{sec:intro}
+\input{tex/introduction}
+
+\section{Related Works}
+\label{sec:related}
+\input{tex/related}
+
+\section{Proposal}
+\label{sec:proposal}
+\input{tex/proposal}
+
+\section{Conclusions}
+\label{sec:conclusions}
+\input{tex/conclusions}
+
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{main}
+\end{document}

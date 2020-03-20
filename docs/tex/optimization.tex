@@ -2,4 +2,21 @@ Based on the 3 rules we further implement two other optimization approaches of o
 
 First, iterating all flockmates for each boid per frame is too expensive and may cause tones of lagging or even crashing. We took Sebastian Lague’s project as reference and implemented a GPU based multi-thread iteration for calculating the 3 key parameters mentioned above. This time each boid has one thread on gpu and iterates simultaneously. 
 
-We also add a random force to each boid every 20 frames. In some situation (e.g. When the flock move straight forward for a time), the boids situation keeps no change and make the whole flock look too ordered and becomes even sterile. So an uneven force with random direction is added to make more change to the flock motion. This force is not designed to completely break the flock order and reform again. It’s order to downgrade the precision of computer calculation and make the motion more realistic.
+We also add a random force to each boid every 20 frames. In some situation(e.g. When the flock move straight forward for a time), the boids situation keeps no change and make the whole flock look too ordered and becomes even sterile. So an uneven force with random direction is added to make more change to the flock motion. This force is not designed to completely break the flock order and reform again. It’s order to downgrade the precision of computer calculation and make the motion more realistic.
+
+\subsection{Avoid Obstacle}
+
+The interaction with obstacle object is the most interesting part of the whole simulation. It makes the flock motion more random and unpredictable when it comes across an object with complex shape. Sometimes the boids could be divided into several smaller groups but the whole motion looks still smooth and you could feel that the small clusters still forming one single flock. 
+
+The strategy to achieve this is complicated. Craig W. Reynolds mentioned two different attempts: force field model and steer-to-avoid, and we implemented the latter one. We designed several rays sending from the front of the boids to detect if there are obstacles ahead. But directly detecting the collision of rays on the surface of object could be very expensive if the object is polehydural. We simplify this question by casting the obstacle into a sphere. In this case for each ray sent from boid, the obstacle could be casted into a circle on a 2D panel with this ray. With this cast we solve 2 problems together, the complexity of directions in 3D and arbitrary shape of obstacles. 
+
+When an obstacle is detected, a normalized force will be added to the boid on the same panel of the detection ray. This force is designed to turn the heading of the current boid and the angle it turns will be based on golden ratio. In some simplified cases, for example if a boid heading perpendicular to a flat surface, the boid will steer a golden spiral to avoid collision. This is designed to avoid shape turns and make the whole process smooth and natural. Since the flock is still maintaining during the avoid process, the avoid force is added on the 3 rules and it is not necessary to worry the force from the 3 rules may affect the performance of avoiding.
+
+
+\subsection{Prey and Predator}
+
+To test the durability of our system, we introduced a prey and predator into our system to simulate a real natural scene.
+
+The prey randomly pick a point in the scene and move toward that point. To make the motion of prey smooth and real, we implement a force from the position of prey to the target point on prey each frame. When the prey reaches the target, another point will be randomly picked. The flock chases the prey by a similar way. A force heading the prey is added on boid each frame together with 3 rules. 
+
+We also added a predator to chase the flock. The predator is always heading the center of flock and the strategy is exactly the same as boid chasing prey. Each boid get an updated predator position each frame. If the distance of predator is less than an avoid radius an escape force will be added toward an opposite direction of predator on boid. The difference between avoid predator and obstacles is the boids do not follow 3 rules when escaping predators. We notice that 3 rules should not be implemented to simulate this process like what it usually happen in nature.

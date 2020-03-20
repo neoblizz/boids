@@ -1,14 +1,7 @@
-Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vivamus maximus a lectus sed dictum. Curabitur pulvinar lectus nec magna molestie consequat. Donec ligula urna, scelerisque et felis sed, euismod feugiat sem. (See equation \ref{eqn:01}.) Donec urna libero, auctor sit amet sem id, malesuada tempor risus. Morbi malesuada lobortis consequat. Aliquam lacinia quam ac tristique sodales. Class aptent taciti sociosqu ad 
-\begin{equation}
-\label{eqn:01}
-P(t)=\frac{b^{\frac{t+1}{T+1}}-b^{\frac{t}{T+1}}}{b-1},
-\end{equation}
-where $t=0,{\ldots}\,,T$, and $b$ is a number greater than $1$, litora torquent per conubia nostra, per inceptos himenaeos.
+Using the very intuitive Unity game engine, we intend to design the first three simple rules of Boids simulation for starters. This is work already in progress by Di Zhao. We then would like to write an abstraction that can be called to represent rules for two major systems within the Boids simulation:
+\begin{itemize}
+    \item \textbf{Local Animation and Rules}: describes the local movement of a boid within its own model. This can easily be mapped, animated through Blender and imported into the Unity scene we intend to design. And can encapsulate a wide range of animations and models, including simple models such as birds, fish, but also some complicated ones, such as four-legged animals like dogs or wolves, simulated as a "pack" within Boids.
+    \item \textbf{Global Rules}: these are additional rules we intend to add within our systems. Some of the ones we have considered include the idea of a "first follower"~\cite{FirstFollower} who may have the ability to increase the search radius of a crowd within Boids and "attract" other objects to the crowd, we have also considered a "coup", which depicts splitting of the Boids animation and introducing repulsive force between the splits based on some random factor. And we would also like to write a clean abstraction to add future rules if we find them interesting.
+\end{itemize}
 
-\begin{multline}
-\label{the-rendering-equation}
-L_o(x, \omega_o, \lambda, t) = L_e(x, \omega_o, \lambda, t)  + \\
-\int_{\Omega} f_r(x, \omega_i, \omega_o, \lambda, t) L_i(x, \omega_i, \lambda, t)(\omega_i \cdot n) \text{d} \omega_i
-\end{multline}
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce auctor accumsan nulla, vitae pharetra ipsum sagittis sit amet. Donec ac metus consectetur, venenatis magna sit amet, viverra sapien. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Phasellus eleifend sem sit amet arcu congue tempus. Proin at iaculis orci. (See equation \ref{the-rendering-equation}.) Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Etiam feugiat dui sit amet ante pellentesque, sed malesuada libero ornare. Curabitur tempor ligula leo, in feugiat urna ornare luctus. Fusce quis metus sit amet neque sagittis elementum. Quisque facilisis quam quis tortor volutpat, et sodales urna efficitur.
+On the technical end, we are interested in looking at fast k-Nearest Neighbor (kNN) searches on the GPU and including that as our shader program to speed-up our computation. The kNN here is used for several different scenarios, including but not limited to finding other Boids to attract or avoid.

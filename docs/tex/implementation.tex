@@ -1,0 +1,22 @@
+The core idea of boids is put forward by Craig W. Reynolds in 1986~\cite{Reynolds:1987}. There is no need to implement a real commander which sends commands to each boid for maintaining the flock. Each individual only need to follow the 3 principles: alignment, cohesion, and separation.
+
+To simulate the aggregate motion, for each boid, we iterate and collect both position and velocity(both speed and direction) information of all other flockmates to calculate average velocity, average distance to other flockmates, and central position of this flock. 
+
+The average velocity is used for alignment. Each boid adjusts its heading towards the average heading of the whole flock. It also checks the speed with average, so if the current boid is too fast, slowing down to wait for flockmates catching up, otherwise speed up. The more important part of alignment is heading match process. It directly results whether it’s jerky or smooth when the flock makes a turn. To achieve this following equation is implemented:
+
+$v_j = (\frac{1}{n}\sum_{i=1,i\neq{j}}^{n}{v_i})\cdot S + v_j \cdot (1-S)$
+
+Where $v_j$ is velocity of current boid, n is the number of boids in flock. S is a parameter set to control the boids motion. Its value varies from 0 to 1. A larger S means the changing vector takes more advantage than the current status. The default setting is 0.5. In this case the changing vector is $average_velocity - v_j$.
+
+Flock center position is used for cohesion. A force to the center of the flock is always added to each boids no matter what situation. Note that when flock cross an obstacle, it is possible that the boids are going to divide into 2 or more parts then concentrate together again after then. In this case there is no need to consider the center of each cluster when flock is temporarily divided. Otherwise the process may look like one flock initiated divide into two or more instead of an obstacle come across a single flock. The cohesion equation is :
+$v_j = ((\frac{1}{n}\sum_{i=1,i\neq{j}}^{n}{pos_i})-pos_j)\cdot S + v_j \cdot (1-S)$
+
+Pos is the position of a boid. The whole idea is very similar to alignment part so no further detailed description here.
+
+Average boid distance is used for separation. The equation is like this:
+
+$v_j = (\frac{1}{n}\sum_{i=1,i\neq{j}}^{n}{\frac{v_i}{dist(pos_i,pos_j)}})\cdot S + v_j \cdot (1-S)$\\
+\\
+$dist(pos_i,pos_j)$ is distance vector from boid[i] to boid[j]. Here both position and velocity of other flockmates are considered. The further boid[i] away from boid[j] the less influence will be added for separation. In our script only the boids with close enough distance will implement separation force in order to avoid unnecessary calculation. If only the position of two boids is considered without velocity, the flock could not be separated out well in some situations (e.g. When boids are too close to each other at the beginning).
+
+The S parameter from 3 equations have the same function but does not necessary to be the same. This script is attached to each individual without further control of all boids following strictly with the condition of the real nature world.

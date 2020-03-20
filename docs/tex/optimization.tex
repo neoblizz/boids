@@ -1,0 +1,5 @@
+Based on the 3 rules we further implement two other optimization approaches of our own. 
+
+First, iterating all flockmates for each boid per frame is too expensive and may cause tones of lagging or even crashing. We took Sebastian Lague’s project as reference and implemented a GPU based multi-thread iteration for calculating the 3 key parameters mentioned above. This time each boid has one thread on gpu and iterates simultaneously. 
+
+We also add a random force to each boid every 20 frames. In some situation (e.g. When the flock move straight forward for a time), the boids situation keeps no change and make the whole flock look too ordered and becomes even sterile. So an uneven force with random direction is added to make more change to the flock motion. This force is not designed to completely break the flock order and reform again. It’s order to downgrade the precision of computer calculation and make the motion more realistic.
